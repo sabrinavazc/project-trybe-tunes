@@ -20,9 +20,10 @@ export default class Header extends React.Component {
 
   render() {
     const { userHeader } = this.state;
+
     return (
       <header data-testid="header-component">
-        {userHeader}
+        <h4>{userHeader}</h4>
         <ul>
           <Link data-testid="link-to-search" to="/search"> Explorar </Link>
           <Link data-testid="link-to-favorites" to="/favorites"> Músicas Favoritas </Link>
