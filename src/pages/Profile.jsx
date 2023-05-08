@@ -5,7 +5,6 @@ import { getUser } from '../services/userAPI';
 
 class Profile extends Component {
   state = {
-    isLoading: false,
     name: '',
     email: '',
     image: '',
@@ -17,7 +16,6 @@ class Profile extends Component {
   }
 
   handleUser = async () => {
-    this.setState({ isLoading: true });
     const { name, email, image, description } = await getUser();
     this.setState({ name, email, image, description });
   };
@@ -37,4 +35,5 @@ class Profile extends Component {
     );
   }
 }
+
 export default Profile;
