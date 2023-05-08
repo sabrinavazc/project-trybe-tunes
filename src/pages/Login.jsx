@@ -27,6 +27,7 @@ export default class Login extends React.Component {
           type="text"
           value={ user }
           onChange={ this.handleChange }
+          placeholder="Insira seu nome"
         />
         <button
           data-testid="login-submit-button"
