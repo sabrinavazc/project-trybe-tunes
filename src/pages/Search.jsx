@@ -1,91 +1,80 @@
-import React from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Header from '../components/Header';
-import AlbumCard from '../components/AlbumCard';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
+import AlbumCard from '../components/AlbumCard';
 import Loading from '../components/Loading';
 
-export default class Search extends React.Component {
+class Search extends Component {
   state = {
-    artist: '',
+    search: '',
     collections: [],
-    loading: false,
+    loading: '',
     searchedArtistName: '',
+    hasSearched: false,
   };
 
-  handleChange = (event) => {
-    this.setState({ artist: event.target.value });
+  handleChange = ({ target: { name, value } }) => {
+    this.setState({
+      [name]: value,
+    });
   };
 
   handleSearch = async () => {
-    const { artist } = this.state;
-    this.setState({ loading: true });
-
-    try {
-      const collections = await searchAlbumsAPI(artist);
-      this.setState({
-        collections,
-        loading: false,
-        searchedArtistName: artist,
-      });
-    } catch (error) {
-      console.error('Erro na busca dos álbuns:', error);
-      this.setState({ loading: false });
-    }
+    const { search } = this.state;
+    const result = await searchAlbumsAPI(search);
+    this.setState({
+      searchedArtistName: search,
+      collections: result,
+      search: '',
+      hasSearched: true,
+    });
   };
 
   render() {
-    const { artist, collections, searchedArtistName, loading } = this.state;
-    const numberDisabled = 2;
-    const buttonDisabled = artist.length < numberDisabled;
-
+    const { search, collections, loading, searchedArtistName, hasSearched } = this.state;
+    const numberBtnDisabled = 2;
+    const buttonDisabled = search.length < numberBtnDisabled;
     return (
       <div data-testid="page-search">
         <Header />
-        {loading ? (
-          <Loading />
-        ) : (
-          <>
-            <input
-              data-testid="search-artist-input"
-              type="text"
-              name=""
-              value={ artist }
-              onChange={ this.handleChange }
-            />
-            <button
-              data-testid="search-artist-button"
-              disabled={ buttonDisabled }
-              onClick={ this.handleSearch }
-            >
-              Pesquisar
-            </button>
-          </>
-        )}
-
-        {collections.length > 0 ? (
-          <>
-            <h2
-              data-testid="search-results"
-            >
-              {`Resultado de álbuns de: ${searchedArtistName}`}
-            </h2>
-            <div>
-              {collections.map((album) => (
-                <a key={ album.collectionId } href={ `/album/${album.collectionId}` }>
-                  <AlbumCard
-                    artistName={ album.artistName }
-                    artworkUrl100={ album.artworkUrl100 }
-                    collectionId={ album.collectionId }
-                    collectionName={ album.collectionName }
-                  />
-                </a>
+        <input
+          data-testid="search-artist-input"
+          type="search"
+          name="search"
+          placeholder="Nome do Artista"
+          id=""
+          value={ search }
+          onChange={ this.handleChange }
+        />
+        <button
+          data-testid="search-artist-button"
+          type="button"
+          disabled={ buttonDisabled }
+          onClick={ this.handleSearch }
+        >
+          Pesquisar
+        </button>
+        <div>
+          {loading && <Loading />}
+          {collections.length > 0 ? (
+            <>
+              <h2>{`Resultado de álbuns de: ${searchedArtistName} `}</h2>
+              {collections.map((collection) => (
+                <AlbumCard key={ collection.collectionId } { ...collection } />
               ))}
-            </div>
-          </>
-        ) : (
-          <p>Nenhum álbum foi encontrado</p>
-        )}
+            </>
+          ) : hasSearched && <p>Nenhum álbum foi encontrado</p>}
+        </div>
       </div>
     );
   }
 }
+
+Search.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
+
+export default Search;
