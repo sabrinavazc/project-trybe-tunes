@@ -29,7 +29,7 @@ class Favorites extends Component {
 
   render() {
     const { isLoading, favoritesList } = this.state;
-    let content = <p>Você não possui músicas favoritas ainda.</p>;
+    let content;
     if (isLoading) {
       content = <Loading />;
     } else if (favoritesList.length > 0) {
@@ -41,7 +41,7 @@ class Favorites extends Component {
             trackName={ song.trackName }
             previewUrl={ song.previewUrl }
             trackId={ song.trackId }
-            artworkUrl100={ song.artworkUrl100 } // adiciona a propriedade artworkUrl100
+            artworkUrl100={ song.artworkUrl100 }
             isChecked={
               favoritesList.some((favoritesong) => song.trackId === favoritesong.trackId)
             }
@@ -49,6 +49,8 @@ class Favorites extends Component {
           />
         </div>
       ));
+    } else {
+      content = <p>Você não possui músicas favoritas ainda.</p>;
     }
     return (
       <div data-testid="page-favorites">
