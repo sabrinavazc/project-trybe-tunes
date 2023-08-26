@@ -1,12 +1,9 @@
 # Boas-vindas ao repositório do projeto Trybetunes!
 
+O desafio lançado pela trybe dessa vez foi para que desenvolvessemos nosso próprio App de reprodução de músicas.
+
 # Requisitos
 
-:warning: **PULL REQUESTS COM ERROS DE LINTER NÃO SERÃO AVALIADAS.** :warning:
-
-:warning: Os gifs são meramente ilustrativos para visualizar o fluxo da aplicação, os nomes devem seguir os requisitos e não o gif. :warning:
-
-:warning: Caso você receba o erro de CORS ao realizar requisições no projeto, tente atualizar a página apertando `CTRL + F5`.
 
 ## 1. Crie as rotas necessárias para a aplicação
 
